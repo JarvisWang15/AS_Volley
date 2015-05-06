@@ -2,8 +2,15 @@ package com.example.jarvis.as_volley;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -12,6 +19,24 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 不必为每一次HTTP请求都创建一个RequestQueue对象，推荐在application中初始化
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        // 透或Volley 取得字符串
+        StringRequest stringRequest =  new  StringRequest( "http://www.google.com.tw" , new  Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                Log.e("TAG", "下載完成：" + s);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.e( "TAG" , "下載失敗："+volleyError.getMessage(), volleyError);
+            }
+        });
+
+        // 將請求加入RequestQueue
+        requestQueue.add(stringRequest);
     }
 
 
